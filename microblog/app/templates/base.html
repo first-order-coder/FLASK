@@ -14,8 +14,14 @@
     {% endif %}
 </head>
 <body>
-    <div> Microblog: <a href="{{ url_for('index') }}"> Index </a></div>
-    <div> Microblog: <a href="{{ url_for('login') }}"> Login </a></div>
+    <div> Microblog: 
+        <a href="{{ url_for('index') }}"> Index </a>
+        {% if current_user.is_anonymous %} <!--one of the added attributes of the Flask-login that adds user objects through UserMixin class-->
+        <a href="{{ url_for('login') }}"> Login </a>
+        {% else %}
+        <a href="{{ url_for('logout') }}"> Logout </a>
+        {% endif %}
+    </div>
     <hr>
     {% with messages = get_flashed_messages() %}
         {% for message in messages %}
