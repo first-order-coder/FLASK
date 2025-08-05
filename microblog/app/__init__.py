@@ -16,4 +16,4 @@ migrate = Migrate(app, db)
 from app import routes, models #models define the structure of the database
 
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'login' #type: ignore << to ignore the error

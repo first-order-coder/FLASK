@@ -6,6 +6,8 @@ from flask import url_for
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app.models import User
+from flask import request
+from urllib.parse import urlsplit
 
 @app.route('/')
 def home():
@@ -15,22 +17,22 @@ def home():
 @login_required
 def index():
 #so instead of writing the html code like this without any autofill options we can use templates to seperate these files and import them later.
-    user = {'username': 'Isildur'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Hardest choices require the strongest wills!'
-        },
-        {
-            'author': {'username': 'Erika'},
-            'body': 'From a place that u wont see, comes a sound that u wont hear, just a flash of light!'
-        },
-        {
-            'author': {'username': 'Thanos'},
-            'body': 'You could not live with your own faliure, and where did that bring you? back to me.'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    # user = {'username': 'Isildur'}
+    # posts = [
+    #     {
+    #         'author': {'username': 'John'},
+    #         'body': 'Hardest choices require the strongest wills!'
+    #     },
+    #     {
+    #         'author': {'username': 'Erika'},
+    #         'body': 'From a place that u wont see, comes a sound that u wont hear, just a flash of light!'
+    #     },
+    #     {
+    #         'author': {'username': 'Thanos'},
+    #         'body': 'You could not live with your own faliure, and where did that bring you? back to me.'
+    #     }
+    # ]
+    return render_template('index.html', title='Home', posts=posts)
 
     
 
@@ -50,6 +52,9 @@ def login():
         # this line is now replaced with real login connected to database --> flash(f'Login requested for user {form.username.data}, remember_me={form.remember_me.data}') 
         # flash stores the measage in the session and it was displayed using HTML in login.html 
         #flashed messages appear only once after the flash() function is called and the are removed after the get_flashed_messages function
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('index')
         return redirect(url_for('index')) #if block is executed only when
                                         #>> the form was submitted (method == post) and all fields pass validation
     return render_template('login.html', title='Sign In', form=form)
