@@ -5,9 +5,11 @@ from flask import flash, redirect
 from flask import url_for
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User
+from app.models import Post, User
 from flask import request
 from urllib.parse import urlsplit
+from app.forms import RegistrationForm
+from app import db
 
 @app.route('/')
 def home():
@@ -32,6 +34,7 @@ def index():
     #         'body': 'You could not live with your own faliure, and where did that bring you? back to me.'
     #     }
     # ]
+    posts = Post.query.all()
     return render_template('index.html', title='Home', posts=posts)
 
     
@@ -63,3 +66,17 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def reigster():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)

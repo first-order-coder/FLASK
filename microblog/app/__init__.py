@@ -13,7 +13,9 @@ app.config.from_object(Config) #flask looks inside the Config class in config.py
 db = SQLAlchemy(app) #db becomes your ORM interface, this line intilize the SQLAlchemy extension and connects it to Flask app, like plugging the database engine
 migrate = Migrate(app, db)
 
+login = LoginManager(app)
+login.login_view = 'login' #type:ignore
+
 from app import routes, models #models define the structure of the database
 
-login = LoginManager(app)
-login.login_view = 'login' #type: ignore << to ignore the error
+

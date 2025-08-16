@@ -2,12 +2,12 @@ from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db, login
+from app import db
+from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 class User(UserMixin, db.Model): #if db.Model isn't used then all the mappings have to be done manually
-    __tablename__ = 'db_User'
     id: so.Mapped[int] = so.mapped_column(primary_key=True) #these are python type hints
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True) #stores string upto 64 characters and indexed for fast lookup and is unique no duplicate usernames
 
