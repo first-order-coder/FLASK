@@ -25,6 +25,9 @@ class User(UserMixin, db.Model): #if db.Model isn't used then all the mappings h
          password_hash = str(self.password_hash)
          return check_password_hash(password_hash, password)
 
+@login.user_loader #user loader function is a built in function in flask
+def load_user(id):
+     return db.session.get(User, int(id))
 
 class Post(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -48,6 +51,3 @@ class Post(db.Model):
 #>>> db.session.scalars(query).all()
 #[<User susan>]
 
-@login.user_loader #user loader function is a built in function in flask
-def load_user(id):
-     return db.session.get(User, int(id))
