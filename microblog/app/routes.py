@@ -19,7 +19,17 @@ from datetime import datetime, timezone
 
 @app.route('/')
 def home():
-    return "Hellow this is the home page"
+    posts = [
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template('index.html', title='Home', posts=posts)
 
 @app.before_request
 def before_request():

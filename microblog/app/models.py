@@ -30,8 +30,10 @@ class User(UserMixin, db.Model): #if db.Model isn't used then all the mappings h
          return check_password_hash(password_hash, password)
     
     def avatar(self, size):
-          digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-          return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+          #digest = md5(self.email.lower().encode('utf-8')).hexdigest() instead of gravatar im using dice bear 
+          #return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+          
+          return f'https://api.dicebear.com/9.x/pixel-art/svg?seed={self.username}&size={size}'
     
 @login.user_loader #user loader function is a built in function in flask
 def load_user(id):
